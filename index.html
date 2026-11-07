@@ -36,7 +36,7 @@
       z-index: 10;
       width: 92%;
       opacity: 0;
-      animation: fadeIn 2s ease-in-out 2.8s forwards;
+      animation: fadeIn 2.5s ease-in-out 5.5s forwards;
     }
     .birthday-banner h1 {
       font-size: clamp(1.1rem, 4.8vw, 1.85rem);
@@ -99,47 +99,60 @@
       startTime = performance.now();
     });
 
-    // Exact bouquet layout matching the reference photo's colors, layers, and depth (z)
+    // Exact bouquet layout with staggered bloom delays
     const flowers = [
       // Back row
-      { x: -12,  y: -215, r: 78,  rot: 0.18, z: 10, delay: 0.55, cTip: [240, 170, 135], cMid: [215, 95, 70],   cCore: [130, 40, 25] }, // Top Center Peach
-      { x: -82,  y: -175, r: 82,  rot: -0.25,z: 15, delay: 0.40, cTip: [255, 250, 235], cMid: [235, 215, 175], cCore: [165, 135, 80] }, // Top Left Cream White
-      { x: 78,   y: -165, r: 80,  rot: 0.35, z: 15, delay: 0.50, cTip: [245, 215, 85],  cMid: [210, 155, 35],  cCore: [135, 80, 10] },  // Top Right Yellow
+      { x: -12,  y: -215, r: 78,  rot: 0.18, tilt: -1.55, sx: -4,  z: 10, delay: 2.80, cTip: [240, 170, 135], cMid: [215, 95, 70],   cCore: [130, 40, 25] }, // Top Center Peach
+      { x: -82,  y: -175, r: 82,  rot: -0.25,tilt: -1.95, sx: -22, z: 15, delay: 2.20, cTip: [255, 250, 235], cMid: [235, 215, 175], cCore: [165, 135, 80] }, // Top Left Cream White
+      { x: 78,   y: -165, r: 80,  rot: 0.35, tilt: -1.15, sx: 20,  z: 15, delay: 2.45, cTip: [245, 215, 85],  cMid: [210, 155, 35],  cCore: [135, 80, 10] },  // Top Right Yellow
 
       // Middle row (outer)
-      { x: -105, y: -90,  r: 86,  rot: -0.42,z: 22, delay: 0.35, cTip: [255, 210, 75],  cMid: [225, 150, 25],  cCore: [145, 75, 10] },  // Mid Left Golden
-      { x: 102,  y: -85,  r: 84,  rot: 0.38, z: 22, delay: 0.45, cTip: [205, 45, 85],   cMid: [155, 18, 50],   cCore: [75, 5, 20] },    // Mid Right Burgundy
+      { x: -105, y: -90,  r: 86,  rot: -0.42,tilt: -2.35, sx: -28, z: 22, delay: 1.50, cTip: [255, 210, 75],  cMid: [225, 150, 25],  cCore: [145, 75, 10] },  // Mid Left Golden
+      { x: 102,  y: -85,  r: 84,  rot: 0.38, tilt: -0.75, sx: 26,  z: 22, delay: 1.70, cTip: [205, 45, 85],   cMid: [155, 18, 50],   cCore: [75, 5, 20] },    // Mid Right Burgundy
 
       // Upper Center Hero Red Lily
-      { x: -4,   y: -135, r: 102, rot: 0.05, z: 35, delay: 0.15, cTip: [255, 65, 65],   cMid: [215, 22, 28],   cCore: [110, 8, 12] },   // Center Red Hero
+      { x: -4,   y: -135, r: 102, rot: 0.05, tilt: -1.57, sx: 0,   z: 35, delay: 0.95, cTip: [255, 65, 65],   cMid: [215, 22, 28],   cCore: [110, 8, 12] },   // Center Red Hero
 
       // Lower outer row
-      { x: -98,  y: 35,   r: 82,  rot: -0.48,z: 28, delay: 0.60, cTip: [250, 225, 75],  cMid: [210, 165, 20],  cCore: [135, 95, 5] },   // Bottom Left Yellow
-      { x: 92,   y: 42,   r: 76,  rot: 0.45, z: 28, delay: 0.65, cTip: [175, 30, 40],   cMid: [120, 12, 18],   cCore: [60, 4, 8] },     // Bottom Right Dark Red
+      { x: -98,  y: 35,   r: 82,  rot: -0.48,tilt: -2.65, sx: -32, z: 28, delay: 1.90, cTip: [250, 225, 75],  cMid: [210, 165, 20],  cCore: [135, 95, 5] },   // Bottom Left Yellow
+      { x: 92,   y: 42,   r: 76,  rot: 0.45, tilt: -0.45, sx: 30,  z: 28, delay: 2.05, cTip: [175, 30, 40],   cMid: [120, 12, 18],   cCore: [60, 4, 8] },     // Bottom Right Dark Red
 
       // Front Hero Trio (Pink, White, Peach-Gold)
-      { x: -55,  y: -45,  r: 98,  rot: -0.22,z: 45, delay: 0.10, cTip: [255, 130, 205], cMid: [215, 45, 140],  cCore: [120, 10, 65] },  // Front Left Pink
-      { x: 58,   y: -35,  r: 104, rot: 0.24, z: 50, delay: 0.05, cTip: [255, 255, 245], cMid: [225, 230, 200], cCore: [145, 165, 105] },// Front Right White
-      { x: -8,   y: 48,   r: 102, rot: 0.08, z: 60, delay: 0.25, cTip: [255, 220, 165], cMid: [230, 145, 75],  cCore: [145, 65, 25] }   // Front Bottom Peach/Gold
+      { x: -55,  y: -45,  r: 98,  rot: -0.22,tilt: -1.85, sx: -16, z: 45, delay: 0.55, cTip: [255, 130, 205], cMid: [215, 45, 140],  cCore: [120, 10, 65] },  // Front Left Pink
+      { x: 58,   y: -35,  r: 104, rot: 0.24, tilt: -1.25, sx: 16,  z: 50, delay: 0.40, cTip: [255, 255, 245], cMid: [225, 230, 200], cCore: [145, 165, 105] },// Front Right White
+      { x: -8,   y: 48,   r: 102, rot: 0.08, tilt: -1.57, sx: -2,  z: 60, delay: 0.80, cTip: [255, 220, 165], cMid: [230, 145, 75],  cCore: [145, 65, 25] }   // Front Bottom Peach/Gold
     ];
 
-    // Sleek, realistic sword-shaped lily leaves & stems at the base
+    // Extra tall slender stems with small unopened buds at the top
+    const topBudStems = [
+      { x0: -8,  y0: 220, x1: -28, y1: -275, cx: -20, cy: -30, budColor: [165, 195, 115] },
+      { x0: 10,  y0: 220, x1: 36,  y1: -272, cx: 24,  cy: -30, budColor: [210, 65, 85] },
+      { x0: -22, y0: 218, x1: -96, y1: -145, cx: -62, cy: 20,  budColor: [185, 145, 95] },
+      { x0: 24,  y0: 218, x1: 106, y1: -142, cx: 68,  cy: 20,  budColor: [165, 195, 115] }
+    ];
+
+    // Sleek, realistic sword-shaped lily leaves & stems at the base + mid-stem leaves
     const blades = [
       { x0: -15, y0: 215, x1: -95,  y1: 110, cx: -65, cy: 155, w: 14, z: 18, delay: 0.0 },
-      { x0: -10, y0: 218, x1: -75,  y1: 85,  cx: -50, cy: 145, w: 16, z: 25, delay: 0.05 },
-      { x0: -6,  y0: 220, x1: -48,  y1: 75,  cx: -32, cy: 145, w: 17, z: 55, delay: 0.08 },
-      { x0: -2,  y0: 222, x1: -22,  y1: 80,  cx: -14, cy: 150, w: 16, z: 62, delay: 0.10 },
-      { x0: 2,   y0: 222, x1: 8,    y1: 78,  cx: 6,   cy: 150, w: 16, z: 58, delay: 0.12 },
-      { x0: 6,   y0: 220, x1: 38,   y1: 82,  cx: 26,  cy: 150, w: 17, z: 63, delay: 0.14 },
-      { x0: 10,  y0: 218, x1: 68,   y1: 95,  cx: 45,  cy: 152, w: 16, z: 26, delay: 0.06 },
-      { x0: 15,  y0: 215, x1: 98,   y1: 125, cx: 62,  cy: 165, w: 14, z: 19, delay: 0.02 },
-      { x0: 18,  y0: 212, x1: 112,  y1: 165, cx: 70,  cy: 185, w: 12, z: 15, delay: 0.04 },
-      { x0: -18, y0: 212, x1: -108, y1: 155, cx: -68, cy: 180, w: 12, z: 15, delay: 0.03 },
+      { x0: -10, y0: 218, x1: -75,  y1: 85,  cx: -50, cy: 145, w: 16, z: 25, delay: 0.02 },
+      { x0: -6,  y0: 220, x1: -48,  y1: 75,  cx: -32, cy: 145, w: 17, z: 55, delay: 0.04 },
+      { x0: -2,  y0: 222, x1: -22,  y1: 80,  cx: -14, cy: 150, w: 16, z: 62, delay: 0.05 },
+      { x0: 2,   y0: 222, x1: 8,    y1: 78,  cx: 6,   cy: 150, w: 16, z: 58, delay: 0.06 },
+      { x0: 6,   y0: 220, x1: 38,   y1: 82,  cx: 26,  cy: 150, w: 17, z: 63, delay: 0.07 },
+      { x0: 10,  y0: 218, x1: 68,   y1: 95,  cx: 45,  cy: 152, w: 16, z: 26, delay: 0.03 },
+      { x0: 15,  y0: 215, x1: 98,   y1: 125, cx: 62,  cy: 165, w: 14, z: 19, delay: 0.01 },
+      { x0: 18,  y0: 212, x1: 112,  y1: 165, cx: 70,  cy: 185, w: 12, z: 15, delay: 0.02 },
+      { x0: -18, y0: 212, x1: -108, y1: 155, cx: -68, cy: 180, w: 12, z: 15, delay: 0.02 },
+      // Mid-stem leaves
+      { x0: -14, y0: 45,  x1: -68,  y1: -25, cx: -45, cy: 5,   w: 15, z: 14, delay: 0.04 },
+      { x0: 12,  y0: 35,  x1: 65,   y1: -35, cx: 42,  cy: -5,  w: 15, z: 14, delay: 0.05 },
+      { x0: -6,  y0: -15, x1: -48,  y1: -95, cx: -32, cy: -60, w: 16, z: 14, delay: 0.06 },
+      { x0: 8,   y0: -20, x1: 52,   y1: -90, cx: 34,  cy: -60, w: 16, z: 14, delay: 0.07 },
       // Upper filler leaves peeking between blooms
-      { x0: -40, y0: -90, x1: -125, y1: -145,cx: -85, cy: -125,w: 15, z: 12, delay: 0.25 },
-      { x0: 40,  y0: -90, x1: 125,  y1: -140,cx: 85,  cy: -120,w: 15, z: 12, delay: 0.28 },
-      { x0: -25, y0: -155,x1: -65,  y1: -245,cx: -50, cy: -205,w: 14, z: 8,  delay: 0.32 },
-      { x0: 25,  y0: -155,x1: 65,   y1: -240,cx: 50,  cy: -200,w: 14, z: 8,  delay: 0.35 }
+      { x0: -40, y0: -90, x1: -125, y1: -145,cx: -85, cy: -125,w: 15, z: 12, delay: 0.08 },
+      { x0: 40,  y0: -90, x1: 125,  y1: -140,cx: 85,  cy: -120,w: 15, z: 12, delay: 0.09 },
+      { x0: -25, y0: -155,x1: -65,  y1: -245,cx: -50, cy: -205,w: 14, z: 8,  delay: 0.10 },
+      { x0: 25,  y0: -155,x1: 65,   y1: -240,cx: 50,  cy: -200,w: 14, z: 8,  delay: 0.10 }
     ];
 
     function initGrid() {
@@ -149,7 +162,6 @@
       canvas.height = height;
 
       scale = Math.min(width / 380, height / 650);
-      // Horizontal scanline cell dimensions (wider vertically than horizontally for CRT stripe effect)
       cellW = Math.max(3.2, Math.floor(3.8 * scale));
       cellH = Math.max(5.5, Math.floor(6.5 * scale));
 
@@ -194,6 +206,11 @@
       return x * x * (3 - 2 * x);
     }
 
+    function smootherstep(min, max, value) {
+      const x = Math.max(0, Math.min(1, (value - min) / (max - min)));
+      return x * x * x * (x * (x * 6 - 15) + 10);
+    }
+
     function easeOutQuart(x) {
       return 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 4);
     }
@@ -210,10 +227,71 @@
       }
     }
 
+    // Rasterize the long vertical stems reaching up to every flower and top bud
+    function rasterizeStems(cx, cy, t) {
+      flowers.forEach((f) => {
+        const swayX = Math.sin(t * 1.5 + f.x * 0.05) * 3.5 * scale;
+        const swayY = Math.cos(t * 1.2 + f.y * 0.05) * 2.5 * scale;
+
+        const x0 = cx + f.sx * scale;
+        const y0 = cy + 222 * scale;
+        const x1 = cx + f.x * scale + swayX;
+        const y1 = cy + f.y * scale + swayY;
+        const ctrlX = cx + (f.sx * 0.5 + f.x * 0.35) * scale + swayX * 0.5;
+        const ctrlY = cy + (222 + f.y) * 0.45 * scale;
+
+        const steps = 95;
+        for (let i = 0; i <= steps; i++) {
+          const u = i / steps;
+          const invU = 1 - u;
+          const px = invU * invU * x0 + 2 * invU * u * ctrlX + u * u * x1;
+          const py = invU * invU * y0 + 2 * invU * u * ctrlY + u * u * y1;
+
+          const c = Math.round(px / cellW);
+          const r = Math.round(py / cellH);
+          plotCell(c, r, 6, 85, 185, 75, 0.72);
+          plotCell(c + 1, r, 5, 45, 125, 45, 0.48);
+        }
+      });
+
+      topBudStems.forEach((s, idx) => {
+        const sway = Math.sin(t * 1.4 + idx) * 4 * scale;
+        const x0 = cx + s.x0 * scale;
+        const y0 = cy + s.y0 * scale;
+        const x1 = cx + s.x1 * scale + sway;
+        const y1 = cy + s.y1 * scale;
+        const ctrlX = cx + s.cx * scale + sway * 0.5;
+        const ctrlY = cy + s.cy * scale;
+
+        const steps = 100;
+        for (let i = 0; i <= steps; i++) {
+          const u = i / steps;
+          const invU = 1 - u;
+          const px = invU * invU * x0 + 2 * invU * u * ctrlX + u * u * x1;
+          const py = invU * invU * y0 + 2 * invU * u * ctrlY + u * u * y1;
+          const c = Math.round(px / cellW);
+          const r = Math.round(py / cellH);
+
+          plotCell(c, r, 5, 80, 175, 70, 0.68);
+        }
+
+        const budR = 12 * scale;
+        for (let dy = -budR; dy <= budR; dy += cellH * 0.6) {
+          const v = dy / budR;
+          const halfW = budR * 0.45 * Math.sin(Math.acos(Math.max(-1, Math.min(1, v))));
+          for (let dx = -halfW; dx <= halfW; dx += cellW * 0.6) {
+            const c = Math.round((x1 + dx) / cellW);
+            const r = Math.round((y1 + dy) / cellH);
+            plotCell(c, r, 6, s.budColor[0] * 0.6, s.budColor[1] * 0.6, s.budColor[2] * 0.6, 0.48);
+          }
+        }
+      });
+    }
+
     // Rasterize sleek, ribbed green blades at the base of the bouquet
     function rasterizeBlades(cx, cy, t) {
       blades.forEach((b, idx) => {
-        const grow = easeOutQuart((t - b.delay) * 0.85);
+        const grow = easeOutQuart((t - b.delay) * 1.5);
         if (grow <= 0) return;
 
         const sway = Math.sin(t * 1.4 + idx * 0.7) * 5 * scale;
@@ -231,24 +309,21 @@
           const u = i / steps;
           const invU = 1 - u;
 
-          // Quadratic Bezier spine
           const px = invU * invU * x0 + 2 * invU * u * ctrlX + u * u * x1;
           const py = invU * invU * y0 + 2 * invU * u * ctrlY + u * u * y1;
 
-          // Tangent normal for blade thickness
           const tx = 2 * invU * (ctrlX - x0) + 2 * u * (x1 - ctrlX);
           const ty = 2 * invU * (ctrlY - y0) + 2 * u * (y1 - ctrlY);
           const len = Math.hypot(tx, ty) || 1;
           const nx = -ty / len;
           const ny = tx / len;
 
-          // Taper neatly to a sharp point at u=1
           const widthProfile = Math.sin(Math.pow(u, 0.65) * Math.PI) * (1 - u * 0.25);
           const halfW = (b.w * scale * 0.5) * widthProfile;
           const wSteps = Math.ceil(halfW / (cellW * 0.5));
 
           for (let w = -wSteps; w <= wSteps; w++) {
-            const v = wSteps === 0 ? 0 : w / wSteps; // -1 to 1
+            const v = wSteps === 0 ? 0 : w / wSteps;
             const absV = Math.abs(v);
             const wx = px + nx * v * halfW;
             const wy = py + ny * v * halfW;
@@ -256,7 +331,6 @@
             const c = Math.round(wx / cellW);
             const r = Math.round(wy / cellH);
 
-            // Crisp bright edges & recessed dark-green center vein like the reference image
             const centerVein = Math.exp(-v * v * 12);
             const edgeRim = Math.pow(absV, 1.4);
             const tipFade = 1 - u * 0.25;
@@ -272,29 +346,73 @@
       });
     }
 
-    // Rasterize each 6-petaled lily onto the character grid
-    function rasterizeLily(f, cx, cy, t) {
-      const elapsed = (t - f.delay) * 0.55;
-      if (elapsed <= 0) return;
+    function angleDiff(a, b) {
+      return Math.atan2(Math.sin(a - b), Math.cos(a - b));
+    }
 
-      const bloom = easeOutQuart(elapsed);
+    // Ultra-detailed 5-stage botanical bloom kinematics:
+    // 1. Ribbed Sepal Bud Swell -> 2. Tip-Crack & Seam Split -> 3. Base-to-Tip Unrolling Wave & Boat-Unfolding -> 4. Tip Reflex Arch -> 5. Pistil & Pivoting Anther Emergence
+    function rasterizeLily(f, cx, cy, t) {
+      const rawPhase = Math.max(0, Math.min(1, (t - f.delay) * 0.24));
+
+      // Continuous C2-smooth botanical sub-stages
+      const budSwell    = smootherstep(0.00, 0.30, rawPhase); // Bud plumps and flushes with color
+      const tipCrack    = smootherstep(0.10, 0.38, rawPhase); // Tips part slightly at top of bud
+      const outerUnfurl = smootherstep(0.14, 0.88, rawPhase); // 3 outer tepals peel back
+      const innerUnfurl = smootherstep(0.24, 0.96, rawPhase); // 3 inner petals follow
+      const tipReflex   = smootherstep(0.60, 1.00, rawPhase); // Tips curl back into full star posture
+      const masterBloom = smootherstep(0.00, 1.00, rawPhase); // Master lock: at 1.0, 100% identical to final state
+
+      // Subtle breathing motion while the bud is swelling & opening
+      const bloomPulse = Math.sin(rawPhase * Math.PI * 3) * 0.025 * (1 - masterBloom);
+
       const swayX = Math.sin(t * 1.5 + f.x * 0.05) * 3.5 * scale;
       const swayY = Math.cos(t * 1.2 + f.y * 0.05) * 2.5 * scale;
 
-      const fx = cx + f.x * scale + swayX;
-      const fy = cy + f.y * scale + swayY;
+      const stemTipX = cx + f.x * scale + swayX;
+      const stemTipY = cy + f.y * scale + swayY;
 
-      // Smoothly expand from a compact star bud into full size with subtle rotation
-      const currentR = f.r * scale * (0.18 + 0.82 * bloom);
-      const currentRot = f.rot + (1 - bloom) * 0.25;
+      // Radius transitions smoothly from compact closed bud (21%) -> swollen goblet (42%) -> full star (100%)
+      const radiusFactor = 0.21 + 0.16 * budSwell * (1 - masterBloom) + 0.79 * masterBloom + bloomPulse;
+      const currentR = f.r * scale * radiusFactor;
 
-      // Bounding box in grid cells (just like ymin/ymax in the screenshot's code!)
+      // Keep the base of the bud anchored on the stem tip while closed, shifting center smoothly to (stemTipX, stemTipY)
+      const budCenterShift = (1 - masterBloom) * currentR * 0.48;
+      const fx = stemTipX - Math.cos(f.tilt) * budCenterShift;
+      const fy = stemTipY - Math.sin(f.tilt) * budCenterShift;
+
+      // Detailed green receptacle & perianth neck at the base of the bud (fades under petals as flower opens)
+      if (masterBloom < 0.82) {
+        const calyxFade = 1 - masterBloom / 0.82;
+        const neckLen = 9 * scale * calyxFade;
+        for (let s = 0; s <= 6; s++) {
+          const nu = s / 6;
+          const nx = stemTipX - Math.cos(f.tilt) * (nu * neckLen);
+          const ny = stemTipY - Math.sin(f.tilt) * (nu * neckLen);
+          const nw = (3.5 + (1 - nu) * 3.5) * scale * calyxFade;
+          for (let dy = -nw; dy <= nw; dy += cellH * 0.5) {
+            for (let dx = -nw; dx <= nw; dx += cellW * 0.5) {
+              if (dx * dx + dy * dy <= nw * nw) {
+                plotCell(
+                  Math.round((nx + dx) / cellW),
+                  Math.round((ny + dy) / cellH),
+                  f.z + 2.5,
+                  50 + nu * 25, 145 + nu * 30, 48, 0.48 + nu * 0.15
+                );
+              }
+            }
+          }
+        }
+      }
+
       const cMin = Math.max(0, Math.floor((fx - currentR * 1.08) / cellW));
       const cMax = Math.min(cols - 1, Math.ceil((fx + currentR * 1.08) / cellW));
       const rMin = Math.max(0, Math.floor((fy - currentR * 1.08) / cellH));
       const rMax = Math.min(rows - 1, Math.ceil((fy + currentR * 1.08) / cellH));
 
-      // Evaluate each of the 6 petals (3 back tepals: 0,2,4 | 3 front petals: 1,3,5)
+      // Gentle helical imbrication (petals untwist as the bud opens; 0 at full bloom)
+      const spiralTwist = (1 - masterBloom) * 0.22 * (1 - tipCrack * 0.4);
+
       for (let c = cMin; c <= cMax; c++) {
         const px = c * cellW - fx;
         for (let r = rMin; r <= rMax; r++) {
@@ -302,39 +420,68 @@
           const dist = Math.hypot(px, py);
           if (dist > currentR * 1.05) continue;
 
-          const baseTheta = Math.atan2(py, px) - currentRot;
+          const worldTheta = Math.atan2(py, px);
 
-          // Check petals (front layer overlaps back layer where they meet)
+          // Evaluate all 6 petals (p=0,2,4: outer tepals | p=1,3,5: inner petals)
           for (let p = 0; p < 6; p++) {
             const isFrontLayer = (p % 2 === 1);
-            const petalAngle = (p * Math.PI) / 3;
 
-            // Wrap angle distance to [-PI, PI]
-            let dTheta = baseTheta - petalAngle;
-            dTheta = Math.atan2(Math.sin(dTheta), Math.cos(dTheta));
+            // Organic per-petal micro-stagger so each petal peels open with slightly unique timing
+            const petalOffset = ((p * 1.618) % 1) * 0.045 * (1 - masterBloom);
+            const rawPetalOpen = (isFrontLayer ? innerUnfurl : outerUnfurl) - petalOffset;
+            const petalOpen = Math.max(0, Math.min(1, rawPetalOpen));
 
-            // Slight natural wave in the petal centerline
-            const wave = Math.sin((dist / currentR) * Math.PI) * 0.04 * (p % 2 === 0 ? 1 : -1);
-            const localAngle = Math.abs(dTheta - wave);
-
-            // Normalized distance from flower center (0) to petal tip (1)
-            const u = dist / currentR;
+            // Foreshortening: when petals are curved upward in the cup stage, their 2D projected length is slightly shorter,
+            // then stretches out to 100% as the tips reflex backward.
+            const foreshorten = 0.80 + 0.12 * Math.sin(petalOpen * Math.PI) + 0.20 * petalOpen;
+            const petalReach = currentR * Math.min(1.0, foreshorten);
+            const u = dist / petalReach;
             if (u > 1.0) continue;
 
-            // Authentic lily petal angular width envelope:
-            // Wide belly in the middle, overlapping near base, tapering to a sharp pointed tip
-            const maxAngle = (isFrontLayer ? 0.44 : 0.41) * Math.sin(Math.pow(u, 0.68) * Math.PI) + 0.09 * (1 - u);
+            // Target star angle at full bloom
+            const fullPetalAngle = f.rot + (p * Math.PI) / 3;
+            const deltaFromTilt = angleDiff(fullPetalAngle, f.tilt);
+
+            // Base-to-Tip Unrolling Wave:
+            // Lower belly (`u < 0.5`) swells outward first while the tip (`u > 0.7`) stays pinched in the goblet stage,
+            // then the tip peels open and arches back during `tipReflex`.
+            const baseBellySpread = smootherstep(0.0, 0.75, petalOpen) * (1 - u * 0.35 * (1 - petalOpen));
+            const tipUnrollWave   = smootherstep(0.25, 1.0, petalOpen - u * 0.18 * (1 - petalOpen));
+            const localSpread = (0.06 + 0.05 * tipCrack * u) * (1 - petalOpen) + (baseBellySpread * 0.45 + tipUnrollWave * 0.55) * petalOpen;
+
+            // S-curve tulip cupping in mid-bloom, vanishing at full bloom (masterBloom = 1)
+            const cupInwardHook = Math.sin(petalOpen * Math.PI) * Math.pow(u, 2.2) * 0.22 * Math.sign(deltaFromTilt || 1);
+            const reflexOutward = Math.sin((1 - tipReflex) * Math.PI * 0.5) * (1 - masterBloom) * 0.05;
+            const currentPetalAngle = f.tilt + deltaFromTilt * localSpread - cupInwardHook + reflexOutward + spiralTwist * (u - 0.3);
+
+            const dTheta = angleDiff(worldTheta, currentPetalAngle);
+
+            // Natural S-wave along the petal midrib
+            const wave = Math.sin(u * Math.PI) * 0.04 * (p % 2 === 0 ? 1 : -1) * petalOpen;
+            const localAngle = Math.abs(dTheta - wave);
+
+            // Transverse 3D Boat-Unfolding Profile:
+            // In the bud, each petal is folded lengthwise like a narrow boat hull; as it blooms, its lateral wings flatten out wide.
+            const wingUnfold = smootherstep(0.15, 0.92, petalOpen - u * 0.12 * (1 - petalOpen));
+            const openMaxAngle = (isFrontLayer ? 0.44 : 0.41) * Math.sin(Math.pow(u, 0.68) * Math.PI) + 0.09 * (1 - u);
+            const gobletAngle  = 0.52 * Math.sin(Math.pow(u, 0.58) * Math.PI) + 0.20 * (1 - u);
+            const closedBudAngle = (0.34 + 0.14 * budSwell) * Math.sin(Math.pow(u, 0.62) * Math.PI) + 0.18 * (1 - u);
+
+            const budToGoblet = closedBudAngle * (1 - budSwell) + gobletAngle * budSwell;
+            const maxAngle = budToGoblet * (1 - wingUnfold) + openMaxAngle * wingUnfold;
 
             if (localAngle <= maxAngle) {
-              // v goes from 0 (central midrib vein) to 1 (outer petal edge)
+              // v goes from 0 (central midrib vein) to 1 (outer petal margin)
               const v = localAngle / (maxAngle || 0.001);
 
-              // Z-depth: front petals sit above back petals; petal center arches higher than edges
-              const layerZ = isFrontLayer ? 2.2 : 0.0;
+              // Z-depth: outer tepals wrap *over* inner petals in the closed bud, then inner petals rise to the front as they uncup
+              const layerZ = isFrontLayer
+                ? (-1.1 * (1 - petalOpen) + 2.2 * petalOpen)
+                : (1.1 * (1 - petalOpen));
               const archZ = Math.sin(u * Math.PI) * (1 - v * v * 0.6) * 1.5;
               const petalZ = f.z + layerZ + archZ;
 
-              // 3-stop botanical color gradient (deep throat -> rich mid-petal -> bright tip/margins)
+              // Base 3-stop botanical color gradient (deep throat -> rich mid-petal -> bright tip/margins)
               let red, green, blue;
               if (u < 0.45) {
                 const tGrad = u / 0.45;
@@ -348,20 +495,31 @@
                 blue  = f.cMid[2] + (f.cTip[2] - f.cMid[2]) * tGrad;
               }
 
+              // Exterior abaxial sepal-green wash & raised green keel rib on the back of closed buds (melts away as petals open)
+              const abaxialExposure = Math.pow(1 - petalOpen, 1.5);
+              if (abaxialExposure > 0.01) {
+                const keelRib = Math.exp(-v * v * 16);
+                const greenMix = abaxialExposure * ((1 - u * 0.45) * 0.52 + keelRib * 0.38);
+                red   = red * (1 - greenMix) + 72 * greenMix;
+                green = green * (1 - greenMix) + 158 * greenMix;
+                blue  = blue * (1 - greenMix) + 52 * greenMix;
+              }
+
               // Deep recessed central midrib groove & bright satin side ridges
               const midribGroove = Math.exp(-v * v * 28);
               const satinPillow = Math.sin(v * Math.PI);
               const edgeLight = Math.pow(v, 2.2) * 0.35;
-              // Longitudinal ribs along the petal
               const veinRibs = Math.sin(v * 18) * 0.06;
 
-              // Ambient occlusion shadow on back petals and deep center throat
+              // When the petal is still boat-folded in the cup stage, light hits the outer keel and the inner hollow is shadowed
+              const cupInteriorShadow = (1 - wingUnfold) * (1 - v * 0.65) * 0.25;
+
               const layerShade = isFrontLayer ? 1.04 : 0.84;
               const throatDepth = 0.55 + 0.45 * smoothstep(0.0, 0.32, u);
 
               // Greenish-yellow nectar star deep inside the throat
-              if (u < 0.16) {
-                const nectar = 1 - u / 0.16;
+              if (u < 0.16 && masterBloom > 0.25) {
+                const nectar = (1 - u / 0.16) * smoothstep(0.25, 0.85, masterBloom);
                 red   = red * (1 - nectar * 0.55) + 95 * nectar;
                 green = green * (1 - nectar * 0.55) + 165 * nectar;
                 blue  = blue * (1 - nectar * 0.55) + 45 * nectar;
@@ -370,14 +528,20 @@
               // Dark crimson/brown lily papillae speckles in the inner throat/belly
               const speckleNoise = Math.sin(c * 12.9898 + r * 78.233 + p * 7.1);
               let speckleFactor = 1.0;
-              if (u > 0.14 && u < 0.52 && v < 0.75 && speckleNoise > 0.88) {
-                speckleFactor = 0.38;
+              if (masterBloom > 0.30 && u > 0.14 && u < 0.52 && v < 0.75 && speckleNoise > 0.88) {
+                const speckleReveal = smoothstep(0.30, 0.75, masterBloom);
+                speckleFactor = 1.0 - 0.62 * speckleReveal;
               }
 
-              // Dark edge line where front petal overlaps back petal
-              const edgeAO = v > 0.9 ? 0.72 : 1.0;
+              // Crisp dark seam groove where locked bud segments split apart, settling to `v > 0.9 ? 0.72 : 1.0` at full bloom
+              const seamWidth = 0.84 + 0.06 * masterBloom;
+              const edgeAO = v > seamWidth ? (0.52 + 0.20 * masterBloom) : 1.0;
 
-              const shade = layerShade * throatDepth * speckleFactor * edgeAO * (0.78 + satinPillow * 0.25 + edgeLight - midribGroove * 0.22 + veinRibs);
+              // Buds start moody & shadowed (0.38) and brighten smoothly to 1.0 at full bloom
+              const budDimming = 0.38 + 0.62 * masterBloom;
+
+              const shade = budDimming * layerShade * throatDepth * speckleFactor * edgeAO *
+                (0.78 + satinPillow * 0.25 + edgeLight - midribGroove * 0.22 + veinRibs - cupInteriorShadow);
 
               red   *= shade;
               green *= shade;
@@ -390,24 +554,54 @@
         }
       }
 
-      // Draw realistic curved stamens and rich orange-rust pollen anthers in the center
-      if (bloom > 0.3) {
-        const stamenProgress = smoothstep(0.3, 1.0, bloom);
+      // Stage 5: Central Pistil (Style + Stigma) & 6 Uncurling Stamens with Pivoting Anthers
+      if (masterBloom > 0.42) {
+        // 5A. Central lime-green style & 3-lobed stigma emerging from the throat
+        const pistilProgress = smootherstep(0.42, 0.88, masterBloom);
+        const pistilAngle = f.rot - 1.35 + Math.sin(t * 1.6 + f.x) * 0.025;
+        const pistilLen = currentR * 0.34 * pistilProgress;
+
+        for (let step = 1; step <= 10; step++) {
+          const u = step / 10;
+          const px = fx + Math.cos(pistilAngle) * pistilLen * u;
+          const py = fy + Math.sin(pistilAngle) * pistilLen * u - Math.sin(u * Math.PI) * 6 * scale;
+          const pc = Math.round(px / cellW);
+          const pr = Math.round(py / cellH);
+
+          if (step === 10) {
+            // 3-lobed pale green-cream stigma cap
+            plotCell(pc, pr, f.z + 4.8, 195, 245, 155, 0.86);
+          } else {
+            plotCell(pc, pr, f.z + 3.8, 145, 215, 105, 0.68);
+          }
+        }
+
+        // 5B. 6 Curved Stamens uncurling outward + versatile anthers pivoting at the tips
+        const stamenProgress = smootherstep(0.46, 0.96, masterBloom);
+        const antherPivot    = smootherstep(0.68, 1.00, masterBloom);
+
         for (let s = 0; s < 6; s++) {
-          const sAngle = currentRot + (s * Math.PI) / 3 + 0.18 + Math.sin(t * 2 + s) * 0.03;
+          const fullStamenAngle = f.rot + (s * Math.PI) / 3 + 0.18 + Math.sin(t * 2 + s) * 0.03;
+          const sDelta = angleDiff(fullStamenAngle, f.tilt);
+          // Filaments uncurl from the bud axis into their radial star spread
+          const sAngle = f.tilt + sDelta * (0.20 + 0.80 * stamenProgress);
           const sLen = currentR * 0.38 * stamenProgress;
 
           for (let step = 1; step <= 12; step++) {
             const u = step / 12;
+            // Inward hook at the tip while emerging, straightening into a graceful upward arch
+            const uncurlLift = Math.sin(u * Math.PI) * (5 + 5 * (1 - stamenProgress)) * scale;
             const sx = fx + Math.cos(sAngle) * sLen * u;
-            const sy = fy + Math.sin(sAngle) * sLen * u - Math.sin(u * Math.PI) * 5 * scale;
+            const sy = fy + Math.sin(sAngle) * sLen * u - uncurlLift;
             const sc = Math.round(sx / cellW);
             const sr = Math.round(sy / cellH);
 
             if (step >= 10) {
-              // Rust-orange / golden pollen anther at tip
+              // Rust-orange / golden pollen anther at tip (pivots & plumps at full bloom)
               plotCell(sc, sr, f.z + 5, 250, 155, 45, 0.95);
-              plotCell(sc + 1, sr, f.z + 5, 220, 110, 30, 0.88);
+              if (antherPivot > 0.25) {
+                plotCell(sc + 1, sr, f.z + 5, 220, 110, 30, 0.88);
+              }
             } else {
               // Pale lime-pink stamen filament
               plotCell(sc, sr, f.z + 4, 215, 235, 145, 0.72);
@@ -445,7 +639,8 @@
       const cx = width * 0.5;
       const cy = height * 0.47;
 
-      // 2. Rasterize foliage & flowers into the Z-buffer
+      // 2. Rasterize tall stems, foliage, and unfurling buds/flowers into the Z-buffer
+      rasterizeStems(cx, cy, t);
       rasterizeBlades(cx, cy, t);
       flowers.forEach(f => rasterizeLily(f, cx, cy, t));
 
